@@ -10,18 +10,6 @@ from skimage.transform import rescale
 from newFlyTrackerUtils import *
 
 def getPredictionModels(arenaName):
-	# centroidModel = load_model('models/' + arenaName + '_centroids.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_2.0_2_False__autoSave.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_2.0_5_False__autoSave.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_1.0_5_False__autoSave.h5')
-
-
-
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_4.0_3_False__autoSave.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_2.0_5_False__autoSave (2).h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__hourglass_4.0_3_False__autoSave.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_0.25_augmentor__hourglass_2.0_3_False__autoSave.h5')
-	# centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__gray__hourglass_1.0_5_False__autoSave.h5')
 	if arenaName == '':
 		centroidModel = load_model('models/flyPixelsnew_adam_1.0_augmentor__gray__hourglass_1.0_5_False__autoSave.h5')
 	else:
