@@ -18,7 +18,7 @@ import glob
 import skvideo.io
 
 import scipy.io as sio
-
+import argparse
 
 def updateImage(x, y):
    global arenaX, arenaY, rectRadius, rectCenterX, rectCenterY, showFrame
