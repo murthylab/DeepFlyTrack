@@ -22,6 +22,8 @@ parser.add_argument('-grabFrames',dest='grabFrames',action='store_true', help='G
 parser.add_argument('-frames',dest='frames',nargs=2, action='store', type=int, help='Only analyze frames [n1 n2]. Note that these can only be APPROXIMATELY guaranteed.')
 parser.add_argument('-dump',dest='dumpdir',type=str,default='', help='Dump processed images to a directory')
 parser.add_argument('-nFlies',dest='nFlies',type=int,default=2, help='Number of flies in arena')
+parser.add_argument('-startFrame',dest='startFrame',type=int,default=0, help='Don''t track movie until this frame')
+parser.add_argument('-useFrameFile',dest='useFrameFile',action='store_false', help='Use the startTracking file to choose which frame to start tracking on')
 pargs = parser.parse_args()
 
 
@@ -63,6 +65,8 @@ if __name__ == '__main__':
 	flyLinesList = []
 	blinkList = []
 	print(pargs.frames)
+	# oh we already have the logic in here - try just loading this? I need to look at my old code to see how 
+	# I used to do this for Dudi
 	if pargs.frames is not None:
 		startFrame = pargs.frames[0]
 	else:
