@@ -17,7 +17,7 @@ def getPredictionModels(arenaName):
 
 	return centroidModel
 
-def predictBackground(movieName,model):
+def predictBackground(movieName,model,startFrame=0):
 	videoInfo = skvideo.io.ffprobe(movieName)
 	width = int(videoInfo['video']['@width'])
 	height = int(videoInfo['video']['@height'])
@@ -32,22 +32,17 @@ def predictBackground(movieName,model):
 	totalBkg = 10
 	numBgFrames = 10
 
-	keyFrames = np.linspace(0,totalFrames,totalBkg-2).astype(int)
+	keyFrames = np.linspace(startFrame,totalFrames,totalBkg-2).astype(int)
 	print(keyFrames)
 
 	rdr2 = skvideo.io.vreader(movieName)
 	frame = next(rdr2)
 
-	print(frameCoords)
-	# frameCoords[0] += 708 - 96
-	# frameCoords[1] += 501
-	# frameCoords[3] = frameCoords[1] + 192
-	# frameCoords[2] = frameCoords[0] + 192
-	# frameCoords = (frameCoords[0] + 708 - 96, frameCoords[1] + 501 - 96, frameCoords[0] + 708 + 96, frameCoords[1] + 501 + 96)
+	# print(frameCoords)
 	arenaFrame = frame[frameCoords[1]:frameCoords[3],frameCoords[0]:frameCoords[2]] *255
 	# arenaFrame = rescale(arenaFrame,1.0 / 1.0)
-	print(np.max(arenaFrame))
-	print(arenaFrame.shape)
+	# print(np.max(arenaFrame))
+	# print(arenaFrame.shape)
 
 	bgAccumulateAll = np.zeros((totalBkg,arenaFrame.shape[0], arenaFrame.shape[1]))
 	bgAccumulateMinute = np.zeros((numBgFrames,arenaFrame.shape[0], arenaFrame.shape[1]))

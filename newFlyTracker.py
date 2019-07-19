@@ -26,18 +26,37 @@ parser.add_argument('-startFrame',dest='startFrame',type=int,default=0, help='Do
 parser.add_argument('-useFrameFile',dest='useFrameFile',action='store_false', help='Use the startTracking file to choose which frame to start tracking on')
 pargs = parser.parse_args()
 
+def getStartTime(dirName):
+   trackingFile = dirName + 'StartTrackingFrame.txt'
+   if (os.path.isfile(trackingFile)):
+      f=open(trackingFile)
+      startFrame = int(f.readline())
+      print('starting frame is ' + str(startFrame))
+      f.close()
+
+      return startFrame
+   else:
+      return 1
 
 if __name__ == '__main__':
 	# point to movie
 	print(pargs.filename)
 	movieName = pargs.filename
 
+	# start everything after a certain number of frames
+	if pargs.frames is not None:
+		startFrame = pargs.frames[0]
+	elif pargs.useFrameFile:
+		startFrame = getStartTime(movieName.split('/')[0])
+	else:
+		startFrame = 0
+
 	print('loading models...')
 	centroidModel = getPredictionModels(pargs.arenaName)
 	print('predicting background...')
 	# can always save the background...
 	if not os.path.exists(movieName[:-4] + '_bkg.mat'):
-		background = predictBackground(movieName,centroidModel)
+		background = predictBackground(movieName,centroidModel,startFrame)
 		sio.savemat(movieName[:-4] + '_bkg.mat',{'background':background})
 	else:
 		background = sio.loadmat(movieName[:-4] + '_bkg.mat')['background']
@@ -64,13 +83,6 @@ if __name__ == '__main__':
 	bodyEllipseList = []
 	flyLinesList = []
 	blinkList = []
-	print(pargs.frames)
-	# oh we already have the logic in here - try just loading this? I need to look at my old code to see how 
-	# I used to do this for Dudi
-	if pargs.frames is not None:
-		startFrame = pargs.frames[0]
-	else:
-		startFrame = 0
 
 	# try:
 	for frameInd,frame in enumerate(videodata):
