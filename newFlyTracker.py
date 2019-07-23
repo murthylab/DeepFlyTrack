@@ -87,7 +87,7 @@ if __name__ == '__main__':
 	# try:
 	for frameInd,frame in enumerate(videodata):
 		if pargs.frames is not None:
-			if frameInd < pargs.frames[0]:
+			if frameInd < startFrame:
 				print(frameInd)
 				continue
 			elif frameInd > pargs.frames[1]:
