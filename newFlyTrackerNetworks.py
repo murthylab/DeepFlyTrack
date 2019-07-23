@@ -74,10 +74,10 @@ def predictBackground(movieName,model,startFrame=0):
 				# print(np.mean(frame[50:750,50:750,2]))
 				# arenaFrame = model.predict(np.expand_dims(rescale(frame[frameCoords[1]:frameCoords[3],frameCoords[0]:frameCoords[2]]*255,1.0/1.0),axis=0))[0,:,:,0]
 				arenaFrame = model.predict(np.expand_dims(frame[frameCoords[1]:frameCoords[3],frameCoords[0]:frameCoords[2]]*255,axis=0))[0,:,:,0]
-	 			bgAccumulateMinute[thisInd] = arenaFrame
+				bgAccumulateMinute[thisInd] = arenaFrame
 	 			# sio.savemat('bkg_' + str(keyNum) + '_' + str(thisInd) + '.mat',{'bkg':bgAccumulateMinute[thisInd]})
 	 			# sio.savemat('bkgtmp_' + str(keyNum) + '_' + str(thisInd) + '.mat',{'frg':np.expand_dims(rescale(frame[frameCoords[1]:frameCoords[3],frameCoords[0]:frameCoords[2]]*255,1.0/1.0),axis=0)})
-	 			thisInd += 1
+				thisInd += 1
 	except:
 		pass
 
