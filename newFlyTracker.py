@@ -85,6 +85,8 @@ if __name__ == '__main__':
 	blinkList = []
 
 	# try:
+	blinkCoords = None
+	print('start frame is ' + str(startFrame))
 	for frameInd,frame in enumerate(videodata):
 		if pargs.frames is not None:
 			if frameInd < startFrame:
@@ -96,7 +98,7 @@ if __name__ == '__main__':
 
 		t = time.time()
 		frame = rgb2bgr(frame)
-		if frameInd == startFrame:
+		if blinkCoords is None:
 			frameCoords,blinkCoords = predictArenaInfo(frame,movieName)
 
 		# if frameInd < 519:

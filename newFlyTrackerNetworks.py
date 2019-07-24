@@ -154,7 +154,7 @@ def predictCentroids(frame, radius, model, nFlies=2, bkg=None, dumpDir=None):
 	mask = np.zeros(prediction.shape,np.uint8)
 	# print(prediction.shape)
 	# print(radius)
-	cv2.circle(mask,(int(prediction.shape[0]/2),int(prediction.shape[1]/2)),radius,255,-1)
+	cv2.circle(mask,(int(prediction.shape[0]/2),int(prediction.shape[1]/2)),int(radius),255,-1)
 
 	prediction[mask!=255] = 0;
 
