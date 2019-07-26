@@ -47,7 +47,7 @@ if __name__ == '__main__':
 	if pargs.frames is not None:
 		startFrame = pargs.frames[0]
 	elif pargs.useFrameFile:
-		startFrame = getStartTime(movieName.split('/')[0])
+		startFrame = getStartTime(os.path.split(movieName)[0] + '/')
 	else:
 		startFrame = 0
 
@@ -88,7 +88,8 @@ if __name__ == '__main__':
 	blinkCoords = None
 	print('start frame is ' + str(startFrame))
 	for frameInd,frame in enumerate(videodata):
-		if pargs.frames is not None:
+		if pargs.frames is not None or startFrame > 1:
+			print(str(frameInd))
 			if frameInd < startFrame:
 				print(frameInd)
 				continue
