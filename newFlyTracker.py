@@ -51,6 +51,8 @@ if __name__ == '__main__':
 	else:
 		startFrame = 0
 
+	# print('dumpDir is ' + pargs.dumpDir)
+
 	print('loading models...')
 	centroidModel = getPredictionModels(pargs.arenaName)
 	print('predicting background...')
@@ -92,8 +94,13 @@ if __name__ == '__main__':
 			print(str(frameInd))
 			if frameInd < startFrame:
 				print(frameInd)
+				centroidList.append(np.zeros(1))
+				bodyEllipseList.append(np.zeros(1))
+				flyLinesList.append(np.zeros(1))
+
+				blinkList.append(np.sum(0))
 				continue
-			elif frameInd > pargs.frames[1]:
+			elif pargs.frames is not None and frameInd > pargs.frames[1]:
 				print('bye bye')
 				break
 
@@ -128,79 +135,79 @@ if __name__ == '__main__':
 		blinkList.append(np.sum(blinkFrame))
 
 
-		if pargs.grabFrames:
-			centroidDist = np.sqrt(np.sum((centroids[0] - centroids[1])**2))
-			# print([int((centroids[0][0] + centroids[1][0])/2),int((centroids[0][1] + centroids[1][1])/2)])
-			# print([int(centroids[0][0]),int(centroids[0][1])])
-			# print([int(centroids[1][0]),int(centroids[1][1])])
-			# print(np.max(behaveFrame),np.min(behaveFrame))
-			print(centroids)
-			print(behaveFrame.shape)
-			# print(behaveFrame.shape)
-			if (centroidDist > 192/3):
-				# take two boxes with centered flies
-				# print(behaveFrame[int(centroids[0][0])-96:int(centroids[0][0])+95,int(centroids[0][1])-96:int(centroids[0][1]+96)].shape)
-				# print(np.max(behaveFrame[int(centroids[0][0])-96:int(centroids[0][0])+96,int(centroids[0][1])-96:int(centroids[0][1]+96),:]))
-				if int(centroids[0][0])-96 < 0:
-					fxOffset = int(centroids[0][0])-96
-				elif int(centroids[0][0])+96 >= behaveFrame.shape[0]:
-					fxOffset = behaveFrame.shape[0] - int(centroids[0][0])+96
-				else:
-					fxOffset = 0
-				if int(centroids[0][1])-96 < 0:
-					fyOffset = int(centroids[0][1])-96
-				elif int(centroids[0][1])+96 > behaveFrame.shape[1]:
-					fyOffset = int(centroids[0][1])+96 - behaveFrame.shape[1]
-				else:
-					fyOffset = 0
+		# if pargs.grabFrames:
+		# 	centroidDist = np.sqrt(np.sum((centroids[0] - centroids[1])**2))
+		# 	# print([int((centroids[0][0] + centroids[1][0])/2),int((centroids[0][1] + centroids[1][1])/2)])
+		# 	# print([int(centroids[0][0]),int(centroids[0][1])])
+		# 	# print([int(centroids[1][0]),int(centroids[1][1])])
+		# 	# print(np.max(behaveFrame),np.min(behaveFrame))
+		# 	print(centroids)
+		# 	print(behaveFrame.shape)
+		# 	# print(behaveFrame.shape)
+		# 	if (centroidDist > 192/3):
+		# 		# take two boxes with centered flies
+		# 		# print(behaveFrame[int(centroids[0][0])-96:int(centroids[0][0])+95,int(centroids[0][1])-96:int(centroids[0][1]+96)].shape)
+		# 		# print(np.max(behaveFrame[int(centroids[0][0])-96:int(centroids[0][0])+96,int(centroids[0][1])-96:int(centroids[0][1]+96),:]))
+		# 		if int(centroids[0][0])-96 < 0:
+		# 			fxOffset = int(centroids[0][0])-96
+		# 		elif int(centroids[0][0])+96 >= behaveFrame.shape[0]:
+		# 			fxOffset = behaveFrame.shape[0] - int(centroids[0][0])+96
+		# 		else:
+		# 			fxOffset = 0
+		# 		if int(centroids[0][1])-96 < 0:
+		# 			fyOffset = int(centroids[0][1])-96
+		# 		elif int(centroids[0][1])+96 > behaveFrame.shape[1]:
+		# 			fyOffset = int(centroids[0][1])+96 - behaveFrame.shape[1]
+		# 		else:
+		# 			fyOffset = 0
 
-				flyFrames[flyInd] = behaveFrame[int(centroids[0][0])-96-fxOffset:int(centroids[0][0])+96-fxOffset,int(centroids[0][1])-96-fyOffset:int(centroids[0][1])+96-fyOffset,:]
-				frameNums[flyInd] = frameInd
-				fliesInFrames[flyInd] = 1
-				flyInd = flyInd + 1
+		# 		flyFrames[flyInd] = behaveFrame[int(centroids[0][0])-96-fxOffset:int(centroids[0][0])+96-fxOffset,int(centroids[0][1])-96-fyOffset:int(centroids[0][1])+96-fyOffset,:]
+		# 		frameNums[flyInd] = frameInd
+		# 		fliesInFrames[flyInd] = 1
+		# 		flyInd = flyInd + 1
 
-				if int(centroids[1][0])-96 < 0:
-					fxOffset = int(centroids[1][0])-96
-				elif int(centroids[1][0])+96 >= behaveFrame.shape[0]:
-					fxOffset = behaveFrame.shape[0] - int(centroids[1][0])+96
-				else:
-					fxOffset = 0
-				if int(centroids[1][1])-96 < 0:
-					fyOffset = int(centroids[1][1])-96
-				elif int(centroids[1][1])+96 > behaveFrame.shape[1]:
-					fyOffset = int(centroids[1][1])+96 - behaveFrame.shape[1]
-				else:
-					fyOffset = 0
+		# 		if int(centroids[1][0])-96 < 0:
+		# 			fxOffset = int(centroids[1][0])-96
+		# 		elif int(centroids[1][0])+96 >= behaveFrame.shape[0]:
+		# 			fxOffset = behaveFrame.shape[0] - int(centroids[1][0])+96
+		# 		else:
+		# 			fxOffset = 0
+		# 		if int(centroids[1][1])-96 < 0:
+		# 			fyOffset = int(centroids[1][1])-96
+		# 		elif int(centroids[1][1])+96 > behaveFrame.shape[1]:
+		# 			fyOffset = int(centroids[1][1])+96 - behaveFrame.shape[1]
+		# 		else:
+		# 			fyOffset = 0
 
-				flyFrames[flyInd] = behaveFrame[int(centroids[1][0])-96-fxOffset:int(centroids[1][0])+96-fxOffset,int(centroids[1][1])-96-fyOffset:int(centroids[1][1]+96-fyOffset),:]
-				frameNums[flyInd] = frameInd
-				flyInd = flyInd + 1
-				fliesInFrames[flyInd] = 1
+		# 		flyFrames[flyInd] = behaveFrame[int(centroids[1][0])-96-fxOffset:int(centroids[1][0])+96-fxOffset,int(centroids[1][1])-96-fyOffset:int(centroids[1][1]+96-fyOffset),:]
+		# 		frameNums[flyInd] = frameInd
+		# 		flyInd = flyInd + 1
+		# 		fliesInFrames[flyInd] = 1
 
-			else:
-				# take one box with both flies in the box
-				if int((centroids[0][0] + centroids[1][0])/2)-96 < 0:
-					fxOffset = int((centroids[0][0] + centroids[1][0])/2)-96
-				elif int((centroids[0][0] + centroids[1][0])/2)+96 >= behaveFrame.shape[0]:
-					fxOffset = behaveFrame.shape[0] - int((centroids[0][0] + centroids[1][0])/2)+96
-				else:
-					fxOffset = 0
-				if int((centroids[0][1] + centroids[1][1])/2)-96 < 0:
-					fyOffset = int((centroids[0][1] + centroids[1][1])/2)-96
-				elif int((centroids[0][1] + centroids[1][1])/2)+96 > behaveFrame.shape[1]:
-					fyOffset = int((centroids[0][1] + centroids[1][1])/2)+96 - behaveFrame.shape[1]
-				else:
-					fyOffset = 0
+		# 	else:
+		# 		# take one box with both flies in the box
+		# 		if int((centroids[0][0] + centroids[1][0])/2)-96 < 0:
+		# 			fxOffset = int((centroids[0][0] + centroids[1][0])/2)-96
+		# 		elif int((centroids[0][0] + centroids[1][0])/2)+96 >= behaveFrame.shape[0]:
+		# 			fxOffset = behaveFrame.shape[0] - int((centroids[0][0] + centroids[1][0])/2)+96
+		# 		else:
+		# 			fxOffset = 0
+		# 		if int((centroids[0][1] + centroids[1][1])/2)-96 < 0:
+		# 			fyOffset = int((centroids[0][1] + centroids[1][1])/2)-96
+		# 		elif int((centroids[0][1] + centroids[1][1])/2)+96 > behaveFrame.shape[1]:
+		# 			fyOffset = int((centroids[0][1] + centroids[1][1])/2)+96 - behaveFrame.shape[1]
+		# 		else:
+		# 			fyOffset = 0
 
-				flyFrames[flyInd] = behaveFrame[int((centroids[0][0] + centroids[1][0])/2)-96-fxOffset:int((centroids[0][0] + centroids[1][0])/2)+96-fxOffset,int((centroids[0][1] + centroids[1][1])/2)-96-fyOffset:int((centroids[0][1] + centroids[1][1])/2)+96-fyOffset]
-				frameNums[flyInd] = frameInd
-				fliesInFrames[flyInd] = 2
-				flyInd = flyInd + 1
+		# 		flyFrames[flyInd] = behaveFrame[int((centroids[0][0] + centroids[1][0])/2)-96-fxOffset:int((centroids[0][0] + centroids[1][0])/2)+96-fxOffset,int((centroids[0][1] + centroids[1][1])/2)-96-fyOffset:int((centroids[0][1] + centroids[1][1])/2)+96-fyOffset]
+		# 		frameNums[flyInd] = frameInd
+		# 		fliesInFrames[flyInd] = 2
+		# 		flyInd = flyInd + 1
 
-			# print(flyInd,flyFrames.shape[0])
-			if flyInd > flyFrames.shape[0]:
-				# if flyInd > 4:
-				break
+		# 	# print(flyInd,flyFrames.shape[0])
+		# 	if flyInd > flyFrames.shape[0]:
+		# 		# if flyInd > 4:
+		# 		break
 
 		# print(centroidBox.shape)
 		print('that loop took ' + str(time.time() - t))
@@ -239,6 +246,7 @@ if __name__ == '__main__':
 	# 	sio.savemat(movieName[:-4] + '_centroids.mat',{'centroids':centroidList,'blinker':blinkList,'flyLines':flyLinesList,'flyEllipses':bodyEllipseList})
 	# 	pass
 
+	sio.savemat(movieName[:-4] + '_centroids.mat',{'centroids':centroidList,'blinker':blinkList,'flyLines':flyLinesList,'flyEllipses':bodyEllipseList})
 
 	if pargs.grabFrames:
 		f.flush()

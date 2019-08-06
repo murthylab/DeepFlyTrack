@@ -11,25 +11,25 @@ try:
 except:
     pass
 # HACK MONKEYPATCH
-from keras.models import Sequential, load_model
-from keras.layers import Dense, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras.layers.normalization import BatchNormalization
-from keras.callbacks import ModelCheckpoint
+# from keras.models import Sequential, load_model
+# from keras.layers import Dense, Activation, Flatten
+# from keras.layers import Conv2D, MaxPooling2D
+# from keras.layers.normalization import BatchNormalization
+# from keras.callbacks import ModelCheckpoint
 
 import h5py
 # import skvideo.io
 from scipy.io import loadmat
-from keras.losses import mean_squared_error
+# from keras.losses import mean_squared_error
 import cv2
 
 import numpy as np
 import scipy.io as sio
 import sys
 import glob
-import pandas as pd
+# import pandas as pd
 
-from skimage.color import rgb2gray
+# from skimage.color import rgb2gray
 
 
 dirName = sys.argv[1]
@@ -205,73 +205,73 @@ angleData = sio.loadmat(filename[:-10] + 'fixedAngles.mat')
 fixedAngles = angleData['automatedAngles']
 
 
-boxSize = 25
+# boxSize = 25
 
-modelname = 'Z:/FlyTracker/Tools/flyIdentifiernew_gray__size50000__adam__classic_1.0_1.0_1.0__autoSave.h5'
-modelname = '/jukebox/murthy/FlyTracker/Tools/flyIdentifiernew_gray__size50000__adam__classic_1.0_1.0_1.0__autoSave.h5'
-# should probably allow the filename and arena type to be command-line defined but until then....
-# videoname = '/jukebox/murthy/Dudi/Behavior/DSX_CTRL/150330_0947/150330_0947.avi'
-# videoname = '/jukebox/fred/closedLoop/Processed/20170422-170316_male203_vPR6/20170422-170316_male203_vPR6_vid.avi'
-videoname = glob.glob(dirName + '/*.avi')[0]
-videoname = videoname.replace('\\','/')
+# modelname = 'Z:/FlyTracker/Tools/flyIdentifiernew_gray__size50000__adam__classic_1.0_1.0_1.0__autoSave.h5'
+# modelname = '/jukebox/murthy/FlyTracker/Tools/flyIdentifiernew_gray__size50000__adam__classic_1.0_1.0_1.0__autoSave.h5'
+# # should probably allow the filename and arena type to be command-line defined but until then....
+# # videoname = '/jukebox/murthy/Dudi/Behavior/DSX_CTRL/150330_0947/150330_0947.avi'
+# # videoname = '/jukebox/fred/closedLoop/Processed/20170422-170316_male203_vPR6/20170422-170316_male203_vPR6_vid.avi'
+# videoname = glob.glob(dirName + '/*.avi')[0]
+# videoname = videoname.replace('\\','/')
 
-# datname = videoname[:-4] + '_tracks.mat'
-arena = '16mic'
+# # datname = videoname[:-4] + '_tracks.mat'
+# arena = '16mic'
 
-# load tracks
-dat = loadmat(filename)
+# # load tracks
+# dat = loadmat(filename)
 
-numframes = fixedAngles.shape[1]
-numframes = 100
-maleframes = np.zeros((numframes,boxSize*2,boxSize*2,1))
-femaleframes = np.zeros((numframes,boxSize*2,boxSize*2,1))
+# numframes = fixedAngles.shape[1]
+# numframes = 100
+# maleframes = np.zeros((numframes,boxSize*2,boxSize*2,1))
+# femaleframes = np.zeros((numframes,boxSize*2,boxSize*2,1))
 
-print(videoname)
-vr = cv2.VideoCapture(videoname)
-vr.set(cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC('H', '2', '6', '4'))
+# print(videoname)
+# vr = cv2.VideoCapture(videoname)
+# vr.set(cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC('H', '2', '6', '4'))
 
-print('loading frames')
+# print('loading frames')
 
-for frameInd in xrange(numframes):
-	ret, frame = vr.read()
-	print(frame.shape)
-    frame = np.double(frame,cv2.COLOR_RGB2BGR)
+# for frameInd in xrange(numframes):
+# 	ret, frame = vr.read()
+# 	print(frame.shape)
+#     frame = np.double(frame,cv2.COLOR_RGB2BGR)
     
-# videogen = skvideo.io.vreader(videoname)
-# for frameInd,frame in enumerate(videogen):
-# 	if frameInd >= dat['pxCenters'].shape[0] or frameInd >= numframes:
-# 		break
+# # videogen = skvideo.io.vreader(videoname)
+# # for frameInd,frame in enumerate(videogen):
+# # 	if frameInd >= dat['pxCenters'].shape[0] or frameInd >= numframes:
+# # 		break
 
-# 	frame = np.double(cv2.cvtColor(frame,cv2.COLOR_RGB2BGR))
+# # 	frame = np.double(cv2.cvtColor(frame,cv2.COLOR_RGB2BGR))
 
-	# grab tracked fly position
-	fx = np.round(dat['pxCenters'][frameInd+1,0,0] + dat['arenaCoords'][0,1]).astype('int')
-	fy = np.round(dat['pxCenters'][frameInd+1,0,1] + dat['arenaCoords'][0,0]).astype('int')
-	img = rgb2gray(frame[(fx-boxSize):(fx+boxSize),(fy-boxSize):(fy+boxSize),:])
-	# print(img.shape)
-	M = cv2.getRotationMatrix2D((img.shape[0]/2,img.shape[1]/2),-fixedAngles[0,frameInd] + 90,1)
-	# print(img.shape)
-	# print(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])).shape)
-	maleframes[frameInd,:,:,:] = np.expand_dims(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])),axis=-1)
+# 	# grab tracked fly position
+# 	fx = np.round(dat['pxCenters'][frameInd+1,0,0] + dat['arenaCoords'][0,1]).astype('int')
+# 	fy = np.round(dat['pxCenters'][frameInd+1,0,1] + dat['arenaCoords'][0,0]).astype('int')
+# 	img = rgb2gray(frame[(fx-boxSize):(fx+boxSize),(fy-boxSize):(fy+boxSize),:])
+# 	# print(img.shape)
+# 	M = cv2.getRotationMatrix2D((img.shape[0]/2,img.shape[1]/2),-fixedAngles[0,frameInd] + 90,1)
+# 	# print(img.shape)
+# 	# print(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])).shape)
+# 	maleframes[frameInd,:,:,:] = np.expand_dims(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])),axis=-1)
 
-	fx = np.round(dat['pxCenters'][frameInd+1,1,0] + dat['arenaCoords'][0,1]).astype('int')
-	fy = np.round(dat['pxCenters'][frameInd+1,1,1] + dat['arenaCoords'][0,0]).astype('int')
-	img = rgb2gray(frame[(fx-boxSize):(fx+boxSize),(fy-boxSize):(fy+boxSize),:])
-	M = cv2.getRotationMatrix2D((img.shape[0]/2,img.shape[1]/2),-fixedAngles[1,frameInd] + 90,1)
-	femaleframes[frameInd,:,:,:] = np.expand_dims(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])),axis=-1)
+# 	fx = np.round(dat['pxCenters'][frameInd+1,1,0] + dat['arenaCoords'][0,1]).astype('int')
+# 	fy = np.round(dat['pxCenters'][frameInd+1,1,1] + dat['arenaCoords'][0,0]).astype('int')
+# 	img = rgb2gray(frame[(fx-boxSize):(fx+boxSize),(fy-boxSize):(fy+boxSize),:])
+# 	M = cv2.getRotationMatrix2D((img.shape[0]/2,img.shape[1]/2),-fixedAngles[1,frameInd] + 90,1)
+# 	femaleframes[frameInd,:,:,:] = np.expand_dims(cv2.warpAffine(img,M,(img.shape[0],img.shape[1])),axis=-1)
 
-maleframes = maleframes / np.max(maleframes) * 2 - 1
-femaleframes = femaleframes / np.max(femaleframes) * 2 - 1
+# maleframes = maleframes / np.max(maleframes) * 2 - 1
+# femaleframes = femaleframes / np.max(femaleframes) * 2 - 1
 
-# model = load_model('res/flyOrienterAdam_autoSave.h5')
-directionPreds = np.zeros((2,maleframes.shape[0]))
-print('loading model')
-model = load_model(modelname)
-print('predicting fly one frames')
-directionPreds[0,:] = np.squeeze(model.predict(maleframes))
-print('predicting fly two frames')
-directionPreds[1,:] = np.squeeze(model.predict(femaleframes))
+# # model = load_model('res/flyOrienterAdam_autoSave.h5')
+# directionPreds = np.zeros((2,maleframes.shape[0]))
+# print('loading model')
+# model = load_model(modelname)
+# print('predicting fly one frames')
+# directionPreds[0,:] = np.squeeze(model.predict(maleframes))
+# print('predicting fly two frames')
+# directionPreds[1,:] = np.squeeze(model.predict(femaleframes))
 
-# now save them
+# # now save them
 
-sio.savemat(filename[:-10] + 'fixedAngles.mat',{'automatedAngles':fixedAngles,'directionGuess':directionPreds})
+# sio.savemat(filename[:-10] + 'fixedAngles.mat',{'automatedAngles':fixedAngles,'directionGuess':directionPreds})
