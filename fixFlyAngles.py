@@ -94,6 +94,10 @@ except:
     filename = glob.glob(dirName + '/*_centroids.mat')[0]
     filename = filename.replace('\\','/')
     globals().update(sio.loadmat(filename))
+
+    filename = glob.glob(dirName + '/*_annotated2.mat')[0]
+    filename = filename.replace('\\','/')
+    globals().update(sio.loadmat(filename))
     print('loaded file')
 
     # fix fly identity
@@ -116,6 +120,11 @@ except:
     exit()
 
 nFlies = centroids.shape[1]
+
+centerX = data['arenaCenter'][0][0]
+centerY = data['arenaCenter'][0][1]
+radius = data['arenaRadius'][0][0]
+arenaCoords = (max(0,centerX-radius), max(0,centerY-radius), min(centerX+radius,width), min(centerY+radius,height));
 
 # first pass, go through and match all flies to be close to each other
 for ii,center in enumerate(centroids):
@@ -310,7 +319,7 @@ for flynum in list(range(nFlies)):
 
     fixedAngles[flynum] = np.mod(outAngles + np.cumsum(totaloffset),360)
 
-sio.savemat(filename[:-10] + 'fixedAngles.mat',{'centroids':centroids,'flyLines':flyLines,'oldAngles':oldAngles,'automatedAngles':fixedAngles})
+sio.savemat(filename[:-10] + 'fixedAngles.mat',{'centroids':centroids,'flyLines':flyLines,'oldAngles':oldAngles,'automatedAngles':fixedAngles,'arenaCoords':arenaCoords})
 
 finalAngles = copy.copy(fixedAngles)
 
@@ -426,4 +435,4 @@ for startFrame in list(range(0,finalAngles.shape[1]-frameStep,frameStep)):
     orientFlies(saveFV,finalAngles,startFrame,startFrame+frameStep)     # we should also be finding jumps and looking at orientations between each one
 
 
-sio.savemat(filename[:-10] + 'fixedAngles.mat',{'centroids':centroids,'flyLines':flyLines,'oldAngles':oldAngles,'automatedAngles':fixedAngles,'finalAngles':finalAngles})
+sio.savemat(filename[:-10] + 'fixedAngles.mat',{'centroids':centroids,'flyLines':flyLines,'oldAngles':oldAngles,'automatedAngles':fixedAngles,'finalAngles':finalAngles,'arenaCoords':arenaCoords})

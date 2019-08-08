@@ -94,9 +94,9 @@ if __name__ == '__main__':
 			print(str(frameInd))
 			if frameInd < startFrame:
 				print(frameInd)
-				centroidList.append(np.zeros(1))
-				bodyEllipseList.append(np.zeros(1))
-				flyLinesList.append(np.zeros(1))
+				centroidList.append(np.zeros((pargs.nFlies,2)))
+				bodyEllipseList.append(np.zeros((pargs.nFlies,5)))
+				flyLinesList.append(np.zeros(*pargs.nFlies,4)))
 
 				blinkList.append(np.sum(0))
 				continue
